@@ -4,6 +4,7 @@ import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import './login.css';
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -51,11 +52,13 @@ const Signup = () => {
 
   return (
     <div>
-      <h2>Signup</h2>
-      <form onSubmit={handleSignup} >
+
+      <form onSubmit={handleSignup}  className='login-form' style={{height:'100%',width:'50%',marginTop:'0%',marginLeft:'25%'}}>
+      <h3>Sign up to create an account</h3><br/>
+      <h6>Already have an account? <a href="/login">Log in here</a></h6>
         <input
           className="form-control" 
-          style={{width:'30%',marginLeft:' 0%'}} 
+          style={{width:'90%',marginLeft:' 5%'}} 
           type="text"
           placeholder="First Name"
           value={firstName}
@@ -64,7 +67,7 @@ const Signup = () => {
         /><br/>
         <input
           className="form-control"
-          style={{width:'30%',marginLeft:' 0%'}}
+          style={{width:'90%',marginLeft:' 5%'}}
           type="text"
           placeholder="Last Name"
           value={lastName}
@@ -73,7 +76,7 @@ const Signup = () => {
         /><br/>
         <input
           className="form-control"
-          style={{width:'30%',marginLeft:' 0%'}}
+          style={{width:'90%',marginLeft:' 5%'}}
           type="email"
           placeholder="Email"
           value={email}
@@ -82,7 +85,7 @@ const Signup = () => {
         /><br/>
         <input
           className="form-control"
-          style={{width:'30%',marginLeft:' 0%'}}
+          style={{width:'90%',marginLeft:' 5%'}}
           type="password"
           placeholder="Password"
           value={password}
@@ -92,7 +95,7 @@ const Signup = () => {
         /><br/>
         <input
               className="form-control"
-              style={{width:'30%',marginLeft:' 0%'}}
+              style={{width:'90%',marginLeft:' 5%'}}
           type="password"
           placeholder="Confirm Password"
           value={confirmPassword}
@@ -102,7 +105,7 @@ const Signup = () => {
         /><br/>
          <input
                className="form-control"
-               style={{width:'30%',marginLeft:' 0%'}}
+               style={{width:'90%',marginLeft:' 5%'}}
           type="text"
           placeholder="company name"
           value={companyname}
@@ -110,7 +113,11 @@ const Signup = () => {
           required
         /><br/>
         {error && <p className="error">{error}</p>}
-        <button type="submit">Signup</button>
+
+        <div class="d-grid gap-2 col-11 mx-auto">
+        <button class="btn btn-primary" type="submit">Sign up</button>
+   </div>
+      
       </form>
     </div>
   );

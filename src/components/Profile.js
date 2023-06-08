@@ -1,5 +1,4 @@
 
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -31,10 +30,14 @@ const Profile = () => {
 
         const userData = response.data.user;
         setUser(userData);
-        setLoading(false);
+       
+
+   
+       setLoading(false);
         
         console.log(userData);
-      } catch (error) {
+      } 
+    catch (error) {
         console.error(error);
         navigate('/login');
       }
@@ -52,20 +55,39 @@ const Profile = () => {
   };
  
 
+  const renderAdminDashboardButton = () => {
+    if (user.email === 'harry@gmail.com') {
+      return (
+        <div>
+         
+       <tr><td><button  className="btn btn-primary"  style = {{backgroundColor:'darkcyan'}}onClick={() => navigate('/admin')}>AdminDashboard</button></td>
+        <td></td><td><button className='btn btn-secondary'  onClick={handleLogout}>Logout</button></td></tr>
+        </div>
+      );
+    }
+    return null;
+  };
+
   return (
     <div className="container">
     
 
     {loading ? (
-      <h2>Loading...</h2>
+      <div className="text-center mt-5">
+      <div className="spinner-border" role="status">
+        <span className="visually-hidden">Loading...</span>
+      </div>
+    </div>
     ) :
     user ? (
-        <div>
-          <h2>Profile</h2>
-          <p className="lead">Name: {user.first_name} {user.last_name}</p>
-          <p className="lead">Email: {user.email}</p>
-          <p className='lead' >Company: {user.Company.name}</p> 
-          <button onClick={handleLogout}>Logout</button>
+        <div className='container'>
+       
+           <p className="lead"><h3>Welcome </h3> {user.first_name} {user.last_name}</p>
+          <p className="lead"><h5>Email-ID:</h5> {user.email}</p>
+          <p className='lead' ><h5>Company Name:</h5> {user.Company.name}</p> 
+          <br/>
+        
+          {renderAdminDashboardButton()} 
         </div>
       ) : (                  
         <h2>401 Unauthorized</h2>
@@ -77,3 +99,5 @@ const Profile = () => {
 };
 
 export default Profile;
+
+

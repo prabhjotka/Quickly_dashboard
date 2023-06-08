@@ -16,28 +16,3 @@ code {
 
 .summary{color:blue;}
 
-.login-form {
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  padding: 20px;
-  background-color: #f7f7f7;
-}
-
-.login-form .form-control {
-  border-color: #ddd;
-}
-
-.login-form .form-control:focus {
-  border-color: #aaa;
-  box-shadow: none;
-}
-
-.login-form .btn-primary {
-  background-color: #007bff;
-  border-color: #007bff;
-}
-
-.login-form .btn-primary:hover {
-  background-color: #0069d9;
-  border-color: #0062cc;
-}
