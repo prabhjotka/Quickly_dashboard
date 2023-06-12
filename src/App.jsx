@@ -65,7 +65,7 @@ isAuthenticated?<Profile />:<Login />
   return (
     
     <Router>
-      <div class="shadow p-3 mb-5 bg-body-tertiary rounded">
+      <div class="shadow p-3 mb-4 bg-body-tertiary rounded">
         <h1 className="text-center" style={{marginTop:'10px',backgroundColor:'darkcyan',color:'white'}} ><i class="fas fa-building"></i>Quickly Inc.</h1></div>
      <div className="App"   style={{marginTop:'20px'}}>
       

@@ -9,6 +9,7 @@ const InvoiceView = () => {
   const [loading, setLoading] = useState(true);
   const [sortField, setSortField] = useState('');
   const [sortOrder, setSortOrder] = useState('');
+  const [searchKeyword, setSearchKeyword] = useState('');
 
   useEffect(() => {
     const fetchInvoices = async () => {
@@ -48,9 +49,7 @@ const InvoiceView = () => {
   };
 
   const formatCurrency = (value) => {
-   
-
-    return '$' + value.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+    return '$' + value.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
   };
 
   const formatDate = (date) => {
@@ -60,6 +59,22 @@ const InvoiceView = () => {
   const formatPercentage = (value) => {
     return `${value.toFixed(2)}%`;
   };
+
+  const handleSearch = (e) => {
+
+    const keyword = e.target.value.trimStart();
+
+  // Split the keyword into parts separated by spaces
+  const keywordParts = keyword.split(' ');
+
+
+    setSearchKeyword(keyword);
+   
+    setCurrentPage(1); // Reset the current page when a new search keyword is entered
+  };
+
+
+
 
   // Apply sorting to invoices
   const sortedInvoices = invoices.sort((a, b) => {
@@ -71,45 +86,53 @@ const InvoiceView = () => {
       const aValue = a.totals.quick_pay_fee;
       const bValue = b.totals.quick_pay_fee;
       return sortOrder === 'asc' ? aValue - bValue : bValue - aValue;
-    } 
-    else if (sortField === 'id'){
-    
+    } else if (sortField === 'id') {
       const aValue = a.id;
       const bValue = b.id;
       return sortOrder === 'asc' ? aValue - bValue : bValue - aValue;
-    }
-
-    else if (sortField === 'company.name'){
+    } else if (sortField === 'Company.name') {
       const aValue = a.Company?.name || '';
       const bValue = b.Company?.name || '';
       return sortOrder === 'asc' ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
-     
-    
-    }
-   
-
-
-
-    else {
-//By default sort by created date
-
+    } else {
+      // By default, sort by created date
       const aValue = new Date(a.createdAt);
       const bValue = new Date(b.createdAt);
       return sortOrder === 'asc' ? aValue - bValue : bValue - aValue;
-      
     }
   });
+
+
+
+  // Apply search filter to invoices
+  const filteredInvoices = sortedInvoices.filter(invoice =>{
+
+
+    if (searchKeyword.trim() === '') {
+      return true; // Return true if the search keyword is empty
+    }
+
+    // Convert the search keyword to lowercase for case-insensitive search
+    const keyword = searchKeyword.toLowerCase();
+
+    // Check if invoice identifier or company name matches the search keyword
+    return (
+      invoice.invoice_identifier?.toLowerCase() === keyword ||
+      invoice.Company?.name.toLowerCase() === keyword
+    );
+  });
+
 
   // Calculate pagination
   const indexOfLastInvoice = currentPage * invoicesPerPage;
   const indexOfFirstInvoice = indexOfLastInvoice - invoicesPerPage;
-  const currentInvoices = sortedInvoices.slice(indexOfFirstInvoice, indexOfLastInvoice);
+  const currentInvoices = filteredInvoices.slice(indexOfFirstInvoice, indexOfLastInvoice);
 
   // Change page
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   // Calculate page numbers to be displayed at the bottom
-  const totalPages = Math.ceil(sortedInvoices.length / invoicesPerPage);
+  const totalPages = Math.ceil(filteredInvoices.length / invoicesPerPage);
   const displayedPages = Math.min(totalPages, 10); // Adjust the number of displayed page numbers here
   const pageNumbers = [];
   let minPage = Math.max(1, currentPage - Math.floor(displayedPages / 2));
@@ -129,12 +152,25 @@ const InvoiceView = () => {
         </div>
       ) : (
         <>
+          <div className="mb-3">
+            <label htmlFor="searchInput" className="form-label">
+              Search:
+            </label>
+            <input
+              type="search"
+              id="searchInput"
+              className="form-control"
+              value={searchKeyword}
+              onChange={handleSearch}
+              placeholder='Search by invoice identifier or company name'
+            />
+          </div>
+
           <table className="table table-striped table-hover">
+            {/* Table headers */}
             <thead>
               <tr>
-                <th onClick={() => handleSort('id')}>
-                  Invoice ID {getSortIndicator('id')}
-                </th>
+                <th onClick={() => handleSort('id')}>Invoice ID {getSortIndicator('id')}</th>
                 <th onClick={() => handleSort('invoice_identifier')}>
                   Invoice Identifier {getSortIndicator('invoice_identifier')}
                 </th>
@@ -147,9 +183,7 @@ const InvoiceView = () => {
                 <th onClick={() => handleSort('createdAt')}>
                   Invoice Creation Date {getSortIndicator('createdAt')}
                 </th>
-                <th onClick={() => handleSort('totals.total')}>
-                  Totals {getSortIndicator('totals.total')}
-                </th>
+                <th onClick={() => handleSort('totals.total')}>Totals {getSortIndicator('totals.total')}</th>
                 <th onClick={() => handleSort('totals.quick_pay_fee')}>
                   Quickly Pay Fee {getSortIndicator('totals.quick_pay_fee')}
                 </th>
@@ -158,6 +192,7 @@ const InvoiceView = () => {
                 </th>
               </tr>
             </thead>
+            {/* Table body */}
             <tbody>
               {currentInvoices.map((invoice) => (
                 <tr key={invoice.id}>
@@ -176,8 +211,8 @@ const InvoiceView = () => {
 
           <div className="d-flex justify-content-between align-items-center mt-3">
             <div>
-              Showing {indexOfFirstInvoice + 1} to {Math.min(indexOfLastInvoice, sortedInvoices.length)} of{' '}
-              {sortedInvoices.length} entries
+              Showing {indexOfFirstInvoice + 1} to {Math.min(indexOfLastInvoice, filteredInvoices.length)} of{' '}
+              {filteredInvoices.length} entries
             </div>
             <nav>
               <ul className="pagination">
@@ -187,10 +222,7 @@ const InvoiceView = () => {
                   </button>
                 </li>
                 {pageNumbers.map((number) => (
-                  <li
-                    key={number}
-                    className={`page-item ${number === currentPage ? 'active' : ''}`}
-                  >
+                  <li key={number} className={`page-item ${number === currentPage ? 'active' : ''}`}>
                     <button className="page-link" onClick={() => paginate(number)}>
                       {number}
                     </button>

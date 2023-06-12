@@ -8,6 +8,7 @@ const CompanyView = () => {
   const [loading, setLoading] = useState(true);
   const [sortField, setSortField] = useState('');
   const [sortDirection, setSortDirection] = useState();
+  const [searchKeyword, setSearchKeyword] = useState('');
 
   useEffect(() => {
     const fetchCompanies = async () => {
@@ -50,8 +51,38 @@ const CompanyView = () => {
     return new Date(date).toLocaleDateString('en-US');
   };
 
-  // Apply sorting to companies
-  const sortedCompanies = companies.sort((a, b) => {
+  const handleSearchChange = (event) => {
+    const keyword = event.target.value.trimStart();
+  
+
+    setSearchKeyword(keyword);
+    
+    setCurrentPage(1); // Reset to the first page when search keyword changes
+  };
+
+  // Apply sorting and filtering to companies
+  const filteredCompanies = companies.filter((company) => {
+
+    if (searchKeyword.trim() === '') {
+      return true; // Return true if the search keyword is empty
+    }
+
+
+    const {id, primary_email, address_city, address_country, phone } = company;
+    const keyword = searchKeyword.toLowerCase();
+
+    return (
+
+      
+      id.toString()=== keyword ||
+      primary_email?.toLowerCase()===keyword ||
+      address_city?.toLowerCase()===keyword ||
+      address_country?.toLowerCase()===keyword ||
+      phone?.toLowerCase()===keyword
+    );
+  });
+
+  const sortedCompanies = filteredCompanies.sort((a, b) => {
     if (sortField === 'id') {
       const aValue = a.id;
       const bValue = b.id;
@@ -77,6 +108,19 @@ const CompanyView = () => {
 
   return (
     <div>
+      <h2 className="mt-3" align="center">
+        Company View
+      </h2>
+      <div className="my-3">
+        <input
+          type="text"
+          placeholder="Search... by company id, primary email, address city, address country, phone"
+          className="form-control"
+          value={searchKeyword}
+          onChange={handleSearchChange}
+       
+        />
+      </div>
       {loading ? (
         <div className="text-center mt-5">
           <div className="spinner-border" role="status">
@@ -97,8 +141,12 @@ const CompanyView = () => {
                 <th onClick={() => handleSorting('primary_email')}>
                   Company Email{getSortIndicator('primary_email')}
                 </th>
-                <th>Company Address</th>
-                <th>Company Phone</th>
+                <th onClick={() => handleSorting('address_city')}>
+                  Company Address{getSortIndicator('address_city')}
+                </th>
+                <th onClick={() => handleSorting('phone')}>
+                  Company Phone{getSortIndicator('phone')}
+                </th>
               </tr>
             </thead>
             <tbody>

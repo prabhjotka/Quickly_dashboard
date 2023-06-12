@@ -9,6 +9,7 @@ const UserView = () => {
   const [loading, setLoading] = useState(true);
   const [sortField, setSortField] = useState('');
   const [sortDirection, setSortDirection] = useState('');
+  const [searchKeyword, setSearchKeyword] = useState('');
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -31,6 +32,7 @@ const UserView = () => {
     fetchUsers();
   }, []);
 
+  
   const sortUsers = (field) => {
     if (sortField === field) {
       setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
@@ -45,6 +47,14 @@ const UserView = () => {
       return sortDirection === 'asc' ? ' ▲' : ' ▼';
     }
     return '';
+  };
+
+  const handleSearchChange = (e) => {
+    const keyword = e.target.value.trimStart()
+    
+    setSearchKeyword(keyword);
+    
+    setCurrentPage(1); // Reset to the first page when search keyword changes
   };
 
   const sortedUsers = users.sort((a, b) => {
@@ -63,17 +73,56 @@ const UserView = () => {
     }
   });
 
+
+  const filteredUsers = sortedUsers.filter(user=>{
+
+    if (searchKeyword.trim() === '') {
+          return true; // Return true if the search keyword is empty
+        }
+    
+        // Convert the search keyword to lowercase for case-insensitive search
+        const keyword = searchKeyword.toLowerCase();
+    
+        // Check if user name or contact number matches the search keyword
+        return (
+          user.full_name?.toLowerCase()===keyword ||
+          user.phone?.toLowerCase()===keyword||
+          user.email?.toLowerCase()===keyword
+        
+  
+        );
+
+
+  });
+
+
+
+
+
+
+
   const indexOfLastUser = currentPage * usersPerPage;
   const indexOfFirstUser = indexOfLastUser - usersPerPage;
-  const currentUsers = sortedUsers.slice(indexOfFirstUser, indexOfLastUser);
+  const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+ 
 
   return (
     <div className="container">
       <h2 className="mt-3" align="center">
         User View
       </h2>
+      <div className="my-3">
+        <input
+          type="text"
+          className="form-control"
+          placeholder="Search by Name or Contact number or Email"
+          value={searchKeyword}
+          onChange={handleSearchChange}
+        />
+      </div>
       {loading ? (
         <div className="text-center mt-5">
           <div className="spinner-border" role="status">
@@ -121,7 +170,7 @@ const UserView = () => {
 
           <Pagination
             usersPerPage={usersPerPage}
-            totalUsers={sortedUsers.length}
+            totalUsers={filteredUsers.length}
             paginate={paginate}
             currentPage={currentPage}
           />
