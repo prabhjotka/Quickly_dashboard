@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Link ,NavLink} from 'react-router-dom';
 
 const CompanyView = () => {
   const [companies, setCompanies] = useState([]);
@@ -68,13 +69,14 @@ const CompanyView = () => {
     }
 
 
-    const {id, primary_email, address_city, address_country, phone } = company;
+    const {id, primary_email, address_city, address_country, phone ,name} = company;
     const keyword = searchKeyword.toLowerCase();
 
     return (
 
       
       id.toString()=== keyword ||
+      name?.toLowerCase()===keyword ||
       primary_email?.toLowerCase()===keyword ||
       address_city?.toLowerCase()===keyword ||
       address_country?.toLowerCase()===keyword ||
@@ -109,18 +111,9 @@ const CompanyView = () => {
   return (
     <div>
       <h2 className="mt-3" align="center">
-        Company View
+        Companies View
       </h2>
-      <div className="my-3">
-        <input
-          type="text"
-          placeholder="Search... by company id, primary email, address city, address country, phone"
-          className="form-control"
-          value={searchKeyword}
-          onChange={handleSearchChange}
-       
-        />
-      </div>
+      
       {loading ? (
         <div className="text-center mt-5">
           <div className="spinner-border" role="status">
@@ -129,11 +122,30 @@ const CompanyView = () => {
         </div>
       ) : (
         <>
+ <div style={{ marginLeft: '1095px' }}>
+                        <NavLink to="/admin"  style={({ isActive }) => ({ 
+                            color: isActive ? 'darkcyan' : 'Blue' })}>
+                        Back to Admin Page
+                        </NavLink>
+                    </div>
+                    <div className="my-3">
+        <input
+          type="text"
+          placeholder="Search... by company id, primary email, address city, address country, phone,Name"
+          className="form-control"
+          value={searchKeyword}
+          onChange={handleSearchChange}
+       
+        />
+      </div>
           <table className="table table-striped table-hover">
             <thead>
               <tr>
                 <th onClick={() => handleSorting('id')}>
                   Company ID{getSortIndicator('id')}
+                </th>
+               <th onClick={() => handleSorting('name')}>
+                  Company Name{getSortIndicator('name')}
                 </th>
                 <th onClick={() => handleSorting('createdAt')}>
                   Creation Date{getSortIndicator('createdAt')}
@@ -153,6 +165,8 @@ const CompanyView = () => {
               {currentCompanies.map((company) => (
                 <tr key={company.id}>
                   <td>{company.id}</td>
+                 
+                  <td><Link to={`/companydetails/${company.name}`}>{company.name}</Link></td>
                   <td>{formatDate(company.createdAt)}</td>
                   <td>{company.primary_email}</td>
                   <td>

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { Link, NavLink } from 'react-router-dom';
 
 const UserView = () => {
   const [users, setUsers] = useState([]);
@@ -32,7 +33,6 @@ const UserView = () => {
     fetchUsers();
   }, []);
 
-  
   const sortUsers = (field) => {
     if (sortField === field) {
       setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
@@ -50,10 +50,8 @@ const UserView = () => {
   };
 
   const handleSearchChange = (e) => {
-    const keyword = e.target.value.trimStart()
-    
+    const keyword = e.target.value.trimStart();
     setSearchKeyword(keyword);
-    
     setCurrentPage(1); // Reset to the first page when search keyword changes
   };
 
@@ -73,33 +71,21 @@ const UserView = () => {
     }
   });
 
-
-  const filteredUsers = sortedUsers.filter(user=>{
-
+  const filteredUsers = sortedUsers.filter((user) => {
     if (searchKeyword.trim() === '') {
-          return true; // Return true if the search keyword is empty
-        }
-    
-        // Convert the search keyword to lowercase for case-insensitive search
-        const keyword = searchKeyword.toLowerCase();
-    
-        // Check if user name or contact number matches the search keyword
-        return (
-          user.full_name?.toLowerCase()===keyword ||
-          user.phone?.toLowerCase()===keyword||
-          user.email?.toLowerCase()===keyword
-        
-  
-        );
+      return true; // Return true if the search keyword is empty
+    }
 
+    // Convert the search keyword to lowercase for case-insensitive search
+    const keyword = searchKeyword.toLowerCase();
 
+    // Check if user name or contact number matches the search keyword
+    return (
+      user.full_name?.toLowerCase() === keyword ||
+      user.phone?.toLowerCase() === keyword ||
+      user.email?.toLowerCase() === keyword
+    );
   });
-
-
-
-
-
-
 
   const indexOfLastUser = currentPage * usersPerPage;
   const indexOfFirstUser = indexOfLastUser - usersPerPage;
@@ -107,22 +93,12 @@ const UserView = () => {
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
- 
-
   return (
     <div className="container">
       <h2 className="mt-3" align="center">
-        User View
+        Users View
       </h2>
-      <div className="my-3">
-        <input
-          type="text"
-          className="form-control"
-          placeholder="Search by Name or Contact number or Email"
-          value={searchKeyword}
-          onChange={handleSearchChange}
-        />
-      </div>
+
       {loading ? (
         <div className="text-center mt-5">
           <div className="spinner-border" role="status">
@@ -131,7 +107,21 @@ const UserView = () => {
         </div>
       ) : (
         <>
-          <table className="table table-striped table-hover">
+          <div style={{ marginLeft: '1095px' }}>
+            <NavLink to="/admin" style={({ isActive }) => ({ color: isActive ? 'darkcyan' : 'Blue' })}>
+              Back to Admin Page
+            </NavLink>
+          </div>
+          <div className="my-3">
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Search by Name or Contact number or Email"
+              value={searchKeyword}
+              onChange={handleSearchChange}
+            />
+          </div>
+          <table className="table table-striped">
             <thead>
               <tr>
                 <th onClick={() => sortUsers('id')}>
@@ -156,7 +146,9 @@ const UserView = () => {
             <tbody>
               {currentUsers.map((user) => (
                 <tr key={user.id}>
-                  <td>{user.id}</td>
+                  <td>
+                    <Link to={`/userdetails/${user.id}`}>{user.id}</Link>
+                  </td>
                   <td>{user.CompanyId}</td>
                   <td>{user.cognito_id}</td>
                   <td>{user.full_name}</td>
@@ -211,21 +203,14 @@ const Pagination = ({ usersPerPage, totalUsers, paginate, currentPage }) => {
         {pageNumbers.map((number) => {
           const isCurrentPage = number === currentPage;
           return (
-            <li
-              key={number}
-              className={`page-item ${isCurrentPage ? 'active' : ''}`}
-            >
+            <li key={number} className={`page-item ${isCurrentPage ? 'active' : ''}`}>
               <button className="page-link" onClick={() => paginate(number)}>
                 {number}
               </button>
             </li>
           );
         })}
-        <li
-          className={`page-item ${
-            currentPage === totalPages ? 'disabled' : ''
-          }`}
-        >
+        <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
           <button className="page-link" onClick={handleClickNext}>
             Next
           </button>

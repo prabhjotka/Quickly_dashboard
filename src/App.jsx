@@ -1,20 +1,21 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, Navigate,Outlet } from 'react-router-dom';
+import  { useState, useEffect } from 'react';
 import Login from './components/Login';
 import Signup from './components/Signup';
 import Profile from './components/Profile';
 import Admin from './components/AdminDashboard';
 import axios from 'axios';
-
-import  { useState, useEffect } from 'react';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/css/bootstrap.css'
 import CompanyView from './components/CompanyView';
 import UsersView from './components/UsersView';
 import InvoiceView from './components/InvoiceView';
-import Container from 'react-bootstrap/Container';
-import Links from './components/Links';
+import Companydetails from './components/Companydetails';
+import InvoiceDetails from './components/InvoiceDetails';
+import UserDetails  from './components/Userdetails';
+
 import Layout from './Layout'
 
 
@@ -53,13 +54,6 @@ const App = () => {
 
 isAuthenticated?<Profile />:<Login />
 
-  // const PrivateRoute = ({ element, ...rest }) => {
-  //   return isAuthenticated ? (
-  //     element
-  //   ) : (
-  //     <Navigate to="/login" state={{ from: rest.location.pathname }} replace />
-  //   );
-  // };
 
 
   return (
@@ -77,7 +71,11 @@ isAuthenticated?<Profile />:<Login />
         <Route path="/" element={<Layout/>} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/profile" element={<Profile />} /> 
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/invoices" element={<InvoiceView/>} />
+        <Route path="/companies" element={<CompanyView/>} />
+        <Route path="/users" element={<UsersView/>} />
+
         <Route path="/admin" element={<Admin/>}>
         <Route path="admin/invoices" element={<InvoiceView/>} />
         <Route path="admin/users" element={<UsersView/>} />
@@ -86,10 +84,16 @@ isAuthenticated?<Profile />:<Login />
          
          </Route>
        
+         <Route path="/invoicedetails/:unique_identifier" element={<InvoiceDetails />} />
+         <Route path="/companydetails/:name"  element={<Companydetails />} />
+         <Route path="/userdetails/:id"  element={<UserDetails/>} />
+
+
         
+
       </Routes>
     </Router>
   );
 };
 
-export default App;
+export default App;      

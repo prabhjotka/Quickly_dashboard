@@ -20,6 +20,11 @@ const Profile = () => {
         navigate('/login');
         return;
       }
+      const handleLogout1 = () => {
+        localStorage.removeItem('isAuthenticated');
+        localStorage.removeItem('token');
+        navigate('/login');
+      };
 
       try {
         const response = await axios.get('https://api-dev.quicklyinc.com/auth/user', {
@@ -61,7 +66,8 @@ const Profile = () => {
         <div>
          
        <tr><td><button  className="btn btn-primary"  style = {{backgroundColor:'darkcyan'}}onClick={() => navigate('/admin')}>AdminDashboard</button></td>
-        <td></td><td><button className='btn btn-secondary'  onClick={handleLogout}>Logout</button></td></tr>
+        {/* <td></td><td><button className='btn btn-secondary'  onClick={handleLogout}>Logout</button></td> */}
+        </tr>
         </div>
       );
     }
@@ -88,12 +94,15 @@ const Profile = () => {
           <br/>
         
           {renderAdminDashboardButton()} 
+          <div style ={{marginLeft:'5px',marginRight:'5px',marginTop:'5px',marginBottom:'5px'}}> 
+<button   className="btn btn-secondary"  type="button" onClick={handleLogout}>Signout</button>
+        </div>
         </div>
       ) : (                  
         <h2>401 Unauthorized</h2>
       )}
 
-      
+
     </div>
   );
 };

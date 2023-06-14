@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { Link ,NavLink} from 'react-router-dom';
+
 
 const InvoiceView = () => {
   const [invoices, setInvoices] = useState([]);
@@ -10,6 +12,7 @@ const InvoiceView = () => {
   const [sortField, setSortField] = useState('');
   const [sortOrder, setSortOrder] = useState('');
   const [searchKeyword, setSearchKeyword] = useState('');
+  
 
   useEffect(() => {
     const fetchInvoices = async () => {
@@ -67,12 +70,10 @@ const InvoiceView = () => {
   // Split the keyword into parts separated by spaces
   const keywordParts = keyword.split(' ');
 
-
     setSearchKeyword(keyword);
    
     setCurrentPage(1); // Reset the current page when a new search keyword is entered
   };
-
 
 
 
@@ -103,10 +104,8 @@ const InvoiceView = () => {
   });
 
 
-
   // Apply search filter to invoices
   const filteredInvoices = sortedInvoices.filter(invoice =>{
-
 
     if (searchKeyword.trim() === '') {
       return true; // Return true if the search keyword is empty
@@ -121,7 +120,6 @@ const InvoiceView = () => {
       invoice.Company?.name.toLowerCase() === keyword
     );
   });
-
 
   // Calculate pagination
   const indexOfLastInvoice = currentPage * invoicesPerPage;
@@ -143,7 +141,10 @@ const InvoiceView = () => {
   }
 
   return (
+   
     <div className="container">
+ 
+
       {loading ? (
         <div className="text-center mt-5">
           <div className="spinner-border" role="status">
@@ -153,6 +154,15 @@ const InvoiceView = () => {
       ) : (
         <>
           <div className="mb-3">
+
+          <div style={{ marginLeft: '1080px' }}>
+                        <NavLink to="/admin"  style={({ isActive }) => ({ 
+                            color: isActive ? 'darkcyan' : 'Blue' })}>
+                        Back to Admin Page
+                        </NavLink>
+                    </div>
+          {/* <Link to="/admin">Back to  Admin Page</Link><br/> */}
+            <h2 className="text-center">Invoices List</h2>
             <label htmlFor="searchInput" className="form-label">
               Search:
             </label>
@@ -170,6 +180,7 @@ const InvoiceView = () => {
             {/* Table headers */}
             <thead>
               <tr>
+              <th className="align-middle">Unique  Identifier</th>
                 <th onClick={() => handleSort('id')}>Invoice ID {getSortIndicator('id')}</th>
                 <th onClick={() => handleSort('invoice_identifier')}>
                   Invoice Identifier {getSortIndicator('invoice_identifier')}
@@ -195,8 +206,14 @@ const InvoiceView = () => {
             {/* Table body */}
             <tbody>
               {currentInvoices.map((invoice) => (
-                <tr key={invoice.id}>
-                  <td>{invoice.id}</td>
+
+                 
+                      <tr
+                  key={invoice.id}>
+                
+                <td><Link to={`/invoicedetails/${invoice.unique_identifier}`}>{invoice.unique_identifier}</Link></td>
+
+              <td>{invoice.id}</td>
                   <td>{invoice.invoice_identifier}</td>
                   <td>{invoice.Company?.name}</td>
                   <td>{formatDate(invoice.issue_date)}</td>
@@ -243,3 +260,5 @@ const InvoiceView = () => {
 };
 
 export default InvoiceView;
+
+

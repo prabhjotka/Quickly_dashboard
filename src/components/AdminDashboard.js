@@ -8,7 +8,6 @@ import { Link,NavLink } from 'react-router-dom';
 import { Outlet } from 'react-router-dom';
 import Spinner from 'react-bootstrap/Spinner';
 
-
 export default function Admin() {
  
   const navigate = useNavigate();
@@ -19,7 +18,6 @@ export default function Admin() {
     navigate('/login');
   };
 
-
   return(
       <>
 
@@ -29,7 +27,6 @@ export default function Admin() {
                     padding: '5px 0 5px 5px',
                     fontSize: '20px'
                 }}>
-
 
 
 
@@ -51,13 +48,14 @@ export default function Admin() {
                           Compaines View
                         </NavLink>
                     </div>
+                    
                     <div style ={{marginLeft:'850px',marginRight:'5px',marginTop:'5px',marginBottom:'5px'}}> 
                     <button   class="btn btn-link"  type="button" onClick={handleLogout1}>Signout</button>
+      
                     </div>
                 </div>
 
    {/* <h3>Admin Dashboard</h3> */}
-
 
 
    
@@ -78,8 +76,8 @@ export default function Admin() {
 <Outlet/>
         </>
 
-
     )
         
     
 }
+
