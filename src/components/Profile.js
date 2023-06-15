@@ -61,18 +61,15 @@ const Profile = () => {
  
 
   const renderAdminDashboardButton = () => {
-    if (user.email === 'harry@gmail.com') {
-      return (
-        <div>
-         
-       <tr><td><button  className="btn btn-primary"  style = {{backgroundColor:'darkcyan'}}onClick={() => navigate('/admin')}>AdminDashboard</button></td>
-        {/* <td></td><td><button className='btn btn-secondary'  onClick={handleLogout}>Logout</button></td> */}
-        </tr>
-        </div>
-      );
-    }
-    return null;
-  };
+    return (
+      <div>
+        
+      <tr><td><button  className="btn btn-primary"  style = {{backgroundColor:'darkcyan'}}onClick={() => navigate('/admin')}>AdminDashboard</button></td>
+      {/* <td></td><td><button className='btn btn-secondary'  onClick={handleLogout}>Logout</button></td> */}
+      </tr>
+      </div>
+    );
+  }
 
   return (
     <div className="container">
