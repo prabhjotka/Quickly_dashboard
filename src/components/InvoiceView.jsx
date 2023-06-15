@@ -211,7 +211,7 @@ const InvoiceView = () => {
                       <tr
                   key={invoice.id}>
                 
-                <td><Link to={`/invoicedetails/${invoice.unique_identifier}`}>{invoice.unique_identifier}</Link></td>
+                <td><Link to={`/invoiced/${invoice.unique_identifier}`}>{invoice.unique_identifier}</Link></td>
 
               <td>{invoice.id}</td>
                   <td>{invoice.invoice_identifier}</td>

@@ -13,8 +13,9 @@ import CompanyView from './components/CompanyView';
 import UsersView from './components/UsersView';
 import InvoiceView from './components/InvoiceView';
 import Companydetails from './components/Companydetails';
-import InvoiceDetails from './components/InvoiceDetails';
 import UserDetails  from './components/Userdetails';
+import InvoiceDetails from './components/InvoiceDetails';
+
 
 import Layout from './Layout'
 
@@ -84,7 +85,9 @@ isAuthenticated?<Profile />:<Login />
          
          </Route>
        
+         <Route path="/invoiced/:unique_identifier" element={<InvoiceDetails />} />
          <Route path="/invoicedetails/:unique_identifier" element={<InvoiceDetails />} />
+         <Route path="/invoiced/:unique_identifier" element={<InvoiceDetails />} />
          <Route path="/companydetails/:name"  element={<Companydetails />} />
          <Route path="/userdetails/:id"  element={<UserDetails/>} />
 
