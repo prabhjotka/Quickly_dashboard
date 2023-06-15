@@ -8,8 +8,6 @@ const Profile = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const[loading, setLoading] = useState(true);
-  const[email,setEmail]=useState('');
-  const[password,setPassword]=useState('');
   
   useEffect(() => {
     const fetchData = async () => {
@@ -20,11 +18,6 @@ const Profile = () => {
         navigate('/login');
         return;
       }
-      const handleLogout1 = () => {
-        localStorage.removeItem('isAuthenticated');
-        localStorage.removeItem('token');
-        navigate('/login');
-      };
 
       try {
         const response = await axios.get('https://api-dev.quicklyinc.com/auth/user', {

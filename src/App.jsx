@@ -1,6 +1,6 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link, Navigate,Outlet } from 'react-router-dom';
-import  { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import  { useEffect } from 'react';
 import Login from './components/Login';
 import Signup from './components/Signup';
 import Profile from './components/Profile';
@@ -24,7 +24,6 @@ const App = () => {
 
 
   const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
-  const [user, setUser] = useState(null);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -39,7 +38,6 @@ const App = () => {
           });
 
           const userData = response.data.user;
-          setUser(userData);
           console.log(userData)
         } catch (error) {
           console.error(error);

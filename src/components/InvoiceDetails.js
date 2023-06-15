@@ -85,15 +85,15 @@ const InvoiceDetails = () => {
               </tr>
               <tr>
                 <th>Quick Pay Fee Percentage:</th>
-                <td>{formatPercentage(invoice.totals. quick_pay_fee_percentage)}</td>
+                <td>{formatPercentage(invoice.totals.quick_pay_fee_percentage)}</td>
               </tr>
               <tr>
                 <th>Quick Pay Fee Total:</th>
-                <td>{formatCurrency(invoice.totals. quick_pay_total)}</td>
+                <td>{formatCurrency(invoice.totals.quick_pay_total)}</td>
               </tr>
               <tr>
                 <th>Deployment Fee</th>
-                <td>{formatCurrency(invoice.totals. deployment_fee)}</td>
+                <td>{formatCurrency(invoice.totals.deployment_fee)}</td>
               </tr>
               <tr>
                 <th>Approved Amount</th>

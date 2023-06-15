@@ -1,12 +1,8 @@
 import React from 'react';
-import InvoiceView from './InvoiceView';
-import CompanyView from './CompanyView';
-import UsersView from './UsersView';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Link,NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { Outlet } from 'react-router-dom';
-import Spinner from 'react-bootstrap/Spinner';
 
 export default function Admin() {
  
