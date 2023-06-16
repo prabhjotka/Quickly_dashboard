@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 
+
 const InvoiceDetails = () => {
   const { unique_identifier } = useParams();
   const [invoice, setInvoice] = useState(null);
@@ -49,7 +50,7 @@ const InvoiceDetails = () => {
       ) : (
         <div>
           <h2 className="text-center">Here are the details of the invoice</h2>
-          <table className="table table-striped">
+          <table className="table table-striped" id="invoice-table">
             <tbody>
               <tr>
                 <th>Invoice ID:</th>
@@ -126,6 +127,7 @@ const InvoiceDetails = () => {
           </table>
           
           <Link to="/invoices" className="btn btn-primary">Back to Invoice List Page</Link>
+         
         </div>
       )}
     </div>

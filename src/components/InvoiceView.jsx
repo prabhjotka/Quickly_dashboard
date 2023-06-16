@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,useRef } from 'react';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link ,NavLink} from 'react-router-dom';
-
+import { DownloadTableExcel } from 'react-export-table-to-excel';
 
 const InvoiceView = () => {
   const [invoices, setInvoices] = useState([]);
@@ -13,7 +13,7 @@ const InvoiceView = () => {
   const [sortOrder, setSortOrder] = useState('');
   const [searchKeyword, setSearchKeyword] = useState('');
   
-
+  const tableRef = useRef(null);
   useEffect(() => {
     const fetchInvoices = async () => {
       try {
@@ -199,15 +199,15 @@ const InvoiceView = () => {
             />
           </div>
 
-          <table className="table table-striped table-hover">
+          <table className="table table-striped table-hover" ref={tableRef} id="invoice-table">
             {/* Table headers */}
             <thead>
               <tr>
-              <th className="align-middle">Unique  Identifier</th>
+              <th className="align-middle" >Unique  Identifier</th>
 
                 <th className="align-middle" onClick={() => handleSort('id')}>Invoice ID {getSortIndicator('id')}</th>
                 <th  className="align-middle" onClick={() => handleSort('invoice_identifier')}>
-                  Invoice Number{getSortIndicator('invoice_identifier')}
+                  Invoice Number {getSortIndicator('invoice_identifier')}
                 </th>
                 <th className="align-middle"  onClick={() => handleSort('Company.name')}>
                   Company Name {getSortIndicator('Company.name')}
@@ -264,6 +264,15 @@ const InvoiceView = () => {
               ))}
             </tbody>
           </table>
+          <DownloadTableExcel
+                    filename="invoice table"
+                    sheet="invoice"
+                    table="invoice-table"
+                    currentTableRef={tableRef.current}>
+
+                   <button className="btn btn-success"> Export to excel </button>
+
+                </DownloadTableExcel>
 
           <div className="d-flex justify-content-between align-items-center mt-3">
             <div>

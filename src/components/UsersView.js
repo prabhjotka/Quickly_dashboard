@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,useRef } from 'react';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link, NavLink } from 'react-router-dom';
+import { DownloadTableExcel } from 'react-export-table-to-excel';
 
 const UserView = () => {
   const [users, setUsers] = useState([]);
@@ -11,7 +12,7 @@ const UserView = () => {
   const [sortField, setSortField] = useState('');
   const [sortDirection, setSortDirection] = useState('');
   const [searchKeyword, setSearchKeyword] = useState('');
-
+  const tableRef = useRef(null);
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -121,7 +122,7 @@ const UserView = () => {
               onChange={handleSearchChange}
             />
           </div>
-          <table className="table table-striped">
+          <table className="table table-striped" ref={tableRef} id= "user-table">
             <thead>
               <tr>
                 <th onClick={() => sortUsers('id')}>
@@ -159,6 +160,16 @@ const UserView = () => {
               ))}
             </tbody>
           </table>
+          <div className="d-flex justify-content-between">
+          <DownloadTableExcel
+                    filename="user table"
+                    sheet="user details"
+                    table="user-table"
+                    currentTableRef={tableRef.current}>
+
+                   <button className="btn btn-success"> Export to excel </button>
+
+                </DownloadTableExcel>
 
           <Pagination
             usersPerPage={usersPerPage}
@@ -166,6 +177,7 @@ const UserView = () => {
             paginate={paginate}
             currentPage={currentPage}
           />
+          </div>
         </>
       )}
     </div>

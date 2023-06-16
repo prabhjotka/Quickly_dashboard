@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,useRef } from 'react';
 import axios from 'axios';
 import { Link ,NavLink} from 'react-router-dom';
+import { DownloadTableExcel } from 'react-export-table-to-excel';
 
 const CompanyView = () => {
   const [companies, setCompanies] = useState([]);
@@ -10,7 +11,7 @@ const CompanyView = () => {
   const [sortField, setSortField] = useState('');
   const [sortDirection, setSortDirection] = useState();
   const [searchKeyword, setSearchKeyword] = useState('');
-
+  const tableRef = useRef(null);
   useEffect(() => {
     const fetchCompanies = async () => {
       try {
@@ -138,7 +139,7 @@ const CompanyView = () => {
        
         />
       </div>
-          <table className="table table-striped table-hover">
+          <table className="table table-striped table-hover" ref={tableRef} id= "company-table">
             <thead>
               <tr>
                 <th onClick={() => handleSorting('id')}>
@@ -177,15 +178,32 @@ const CompanyView = () => {
               ))}
             </tbody>
           </table>
+          
+                
 
+                <div className="d-flex justify-content-between">
+                  
+                <DownloadTableExcel
+                    filename="company table"
+                    sheet="company"
+                    table="company-table"
+                    currentTableRef={tableRef.current}>
+
+                   <button className="btn btn-success">Export to Excel </button>
+
+                </DownloadTableExcel>
+              
           <Pagination
             companiesPerPage={companiesPerPage}
             totalCompanies={sortedCompanies.length}
             paginate={paginate}
             currentPage={currentPage}
           />
+          </div>
         </>
       )}
+
+      
     </div>
   );
 };
