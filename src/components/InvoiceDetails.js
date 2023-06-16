@@ -56,7 +56,7 @@ const InvoiceDetails = () => {
                 <td>{invoice.id}</td>
               </tr>
               <tr>
-                <th>Invoice Identifier:</th>
+                <th>Invoice Number:</th>
                 <td>{invoice.invoice_identifier}</td>
               </tr>
               <tr>
@@ -114,6 +114,11 @@ const InvoiceDetails = () => {
               <tr>
                 <th>Balance Amount</th>
                 <td>{formatCurrency(invoice.totals.balance)}
+               </td>
+              </tr>
+             <tr>
+                <th>Buyer Company Name</th>
+                <td>{(invoice.payingCompany?.name)}
                </td>
               </tr>
               

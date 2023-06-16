@@ -52,7 +52,7 @@ const InvoiceView = () => {
   };
 
   const formatCurrency = (value) => {
-    return '$' + value.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+    return '$' + value?.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
   };
 
   const formatDate = (date) => {
@@ -68,7 +68,7 @@ const InvoiceView = () => {
     const keyword = e.target.value.trimStart();
 
   // Split the keyword into parts separated by spaces
-  const keywordParts = keyword.split(' ');
+  // const keywordParts = keyword.split(' ');
 
     setSearchKeyword(keyword);
    
@@ -80,25 +80,49 @@ const InvoiceView = () => {
   // Apply sorting to invoices
   const sortedInvoices = invoices.sort((a, b) => {
     if (sortField === 'totals.total') {
-      const aValue = a.totals.total;
-      const bValue = b.totals.total;
+      const aValue = a.totals?.total;
+      const bValue = b.totals?.total;
       return sortOrder === 'asc' ? aValue - bValue : bValue - aValue;
     } else if (sortField === 'totals.quick_pay_fee') {
-      const aValue = a.totals.quick_pay_fee;
-      const bValue = b.totals.quick_pay_fee;
+      const aValue = a.totals?.quick_pay_fee;
+      const bValue = b.totals?.quick_pay_fee;
       return sortOrder === 'asc' ? aValue - bValue : bValue - aValue;
     } else if (sortField === 'id') {
-      const aValue = a.id;
-      const bValue = b.id;
+      const aValue = a?.id;
+      const bValue = b?.id;
       return sortOrder === 'asc' ? aValue - bValue : bValue - aValue;
     } else if (sortField === 'Company.name') {
       const aValue = a.Company?.name || '';
       const bValue = b.Company?.name || '';
       return sortOrder === 'asc' ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
-    } else {
+
+    }
+    else if (sortField === 'payingCompany.name') {
+      const aValue = a.payingCompany?.name || '';
+      const bValue = b.payingCompany?.name || '';
+      return sortOrder === 'asc' ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
+
+    }
+    else if (sortField === 'issue_date') 
+  
+      {
+        const aValue = new Date(a?.issue_date);
+        const bValue = new Date(b?.issue_date);
+        return sortOrder === 'asc' ? aValue - bValue : bValue - aValue;
+      }
+      else if (sortField === 'due_date') 
+  
+      {
+        const aValue = new Date(a?.due_date);
+        const bValue = new Date(b?.due_date);
+        return sortOrder === 'asc' ? aValue - bValue : bValue - aValue;
+      }
+  
+    
+    else {
       // By default, sort by created date
-      const aValue = new Date(a.createdAt);
-      const bValue = new Date(b.createdAt);
+      const aValue = new Date(a?.createdAt);
+      const bValue = new Date(b?.createdAt);
       return sortOrder === 'asc' ? aValue - bValue : bValue - aValue;
     }
   });
@@ -172,7 +196,7 @@ const InvoiceView = () => {
               className="form-control"
               value={searchKeyword}
               onChange={handleSearch}
-              placeholder='Search by invoice identifier or company name'
+              placeholder='Search by invoice Number number or Company name'
             />
           </div>
 
@@ -181,26 +205,38 @@ const InvoiceView = () => {
             <thead>
               <tr>
               <th className="align-middle">Unique  Identifier</th>
-                <th onClick={() => handleSort('id')}>Invoice ID {getSortIndicator('id')}</th>
-                <th onClick={() => handleSort('invoice_identifier')}>
-                  Invoice Identifier {getSortIndicator('invoice_identifier')}
+
+                <th className="align-middle" onClick={() => handleSort('id')}>Invoice ID {getSortIndicator('id')}</th>
+                <th  className="align-middle" onClick={() => handleSort('invoice_identifier')}>
+                  Invoice Number{getSortIndicator('invoice_identifier')}
                 </th>
-                <th onClick={() => handleSort('Company.name')}>
+                <th className="align-middle"  onClick={() => handleSort('Company.name')}>
                   Company Name {getSortIndicator('Company.name')}
                 </th>
-                <th onClick={() => handleSort('issue_date')}>
+                <th className="align-middle" onClick={() => handleSort('issue_date')}>
                   Invoice Issue Date {getSortIndicator('issue_date')}
                 </th>
-                <th onClick={() => handleSort('createdAt')}>
+                <th className="align-middle" onClick={() => handleSort('due_date')}>
+                  Invoice Due Date {getSortIndicator('due_date')}
+                </th>
+                <th className="align-middle" onClick={() => handleSort('createdAt')}>
                   Invoice Creation Date {getSortIndicator('createdAt')}
                 </th>
-                <th onClick={() => handleSort('totals.total')}>Totals {getSortIndicator('totals.total')}</th>
+                <th className="align-middle"  onClick={() => handleSort('totals.total')}>Totals {getSortIndicator('totals.total')}</th>
                 <th onClick={() => handleSort('totals.quick_pay_fee')}>
                   Quickly Pay Fee {getSortIndicator('totals.quick_pay_fee')}
                 </th>
-                <th onClick={() => handleSort('totals.quick_pay_fee_percentage')}>
-                  Quickly Pay Fee Percentage {getSortIndicator('totals.quick_pay_fee_percentage')}
+                <th className="align-middle"> Quickly Pay Fee Percentage 
                 </th>
+                <th className="align-middle">
+                  Approved Amount </th>
+                <th className="align-middle">
+                Deployment Fee 
+                </th>
+                <th className="align-middle" onClick={() => handleSort('payingCompany.name')}>
+               Buyer company name {getSortIndicator('payingCompany.name')}
+                </th>
+
               </tr>
             </thead>
             {/* Table body */}
@@ -214,13 +250,17 @@ const InvoiceView = () => {
                 <td><Link to={`/invoiced/${invoice.unique_identifier}`}>{invoice.unique_identifier}</Link></td>
 
               <td>{invoice.id}</td>
-                  <td>{invoice.invoice_identifier}</td>
-                  <td>{invoice.Company?.name}</td>
-                  <td>{formatDate(invoice.issue_date)}</td>
-                  <td>{formatDate(invoice.createdAt)}</td>
-                  <td>{formatCurrency(invoice.totals.total)}</td>
-                  <td>{formatCurrency(invoice.totals.quick_pay_fee)}</td>
-                  <td>{formatPercentage(invoice.totals.quick_pay_fee_percentage)}</td>
+                  <td>{invoice?.invoice_identifier}</td>
+                  <td>{invoice?.Company?.name}</td>
+                  <td>{formatDate(invoice?.issue_date)}</td>
+                  <td>{formatDate(invoice?.due_date)}</td>
+                  <td>{formatDate(invoice?.createdAt)}</td>
+                  <td>{formatCurrency(invoice?.totals?.total)}</td>
+                  <td>{formatCurrency(invoice?.totals?.quick_pay_fee)}</td>
+                  <td>{formatPercentage(invoice?.totals?.quick_pay_fee_percentage)}</td>
+                  <td>{formatCurrency(invoice.totals?.approved_amount)}</td>
+                  <td>{formatCurrency(invoice.totals?.deployment_fee)}</td>
+                  <td>{(invoice.payingCompany?.name)}</td>
                 </tr>
               ))}
             </tbody>
