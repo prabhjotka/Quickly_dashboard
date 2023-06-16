@@ -21,10 +21,6 @@ const Login = () => {
         password,
       });
       console.log('API response:', response.data);
-      //const { user,jwtToken } = response.data
-    const{user}=response.data;
-      
-///console.log(jwtToken);
 
       // // Save authentication state and token in local storage
       localStorage.setItem('isAuthenticated', 'true');

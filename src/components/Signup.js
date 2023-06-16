@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
 import './login.css';
 
 const Signup = () => {
@@ -36,7 +34,7 @@ const Signup = () => {
             
       });
 
-      const { user, jwtToken } = response.data;
+      const { jwtToken } = response.data;
 
       // Save authentication state and token in local storage
       localStorage.setItem('isAuthenticated', 'true');

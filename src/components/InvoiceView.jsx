@@ -67,8 +67,7 @@ const InvoiceView = () => {
 
     const keyword = e.target.value.trimStart();
 
-  // Split the keyword into parts separated by spaces
-  // const keywordParts = keyword.split(' ');
+ 
 
     setSearchKeyword(keyword);
    
