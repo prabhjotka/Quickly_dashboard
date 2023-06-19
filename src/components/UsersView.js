@@ -47,7 +47,7 @@ const UserView = () => {
     if (sortField === field) {
       return sortDirection === 'asc' ? ' ▲' : ' ▼';
     }
-    return '';
+    return <>&#11021;</>;
   };
 
   const handleSearchChange = (e) => {

@@ -46,7 +46,7 @@ const CompanyView = () => {
       // Display the sort indicator based on the current sort order
       return sortDirection === 'asc' ? ' ▲' : ' ▼';
     }
-    return '';
+    return <>&#11021;</>;
   };
 
   const formatDate = (date) => {

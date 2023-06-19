@@ -4,16 +4,18 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link ,NavLink} from 'react-router-dom';
 import { DownloadTableExcel } from 'react-export-table-to-excel';
 
+
 const InvoiceView = () => {
   const [invoices, setInvoices] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [invoicesPerPage] = useState(10);
   const [loading, setLoading] = useState(true);
+  const [loading1, setLoading1] = useState(true);
   const [sortField, setSortField] = useState('');
   const [sortOrder, setSortOrder] = useState('');
   const [searchKeyword, setSearchKeyword] = useState('');
   
-  const tableRef = useRef(null);
+  const ref = useRef(null);
   useEffect(() => {
     const fetchInvoices = async () => {
       try {
@@ -31,7 +33,14 @@ const InvoiceView = () => {
 
     fetchInvoices();
   }, []);
+  useEffect(() => {
+    
+    const delay = 7000;
 
+    setTimeout(() => {
+      setLoading1(false);
+    }, delay);
+  }, []);
   const handleSort = (field) => {
     if (sortField === field) {
       // Reverse the sort order if the same field is clicked again
@@ -43,12 +52,16 @@ const InvoiceView = () => {
     }
   };
 
+ 
+  
+  
   const getSortIndicator = (field) => {
     if (sortField === field) {
       // Display the sort indicator based on the current sort order
-      return sortOrder === 'asc' ? '▲' : '▼';
+      return sortOrder=== 'asc' ? ' ▲' : ' ▼';
     }
-    return '';
+    // Display the sort indicator as a neutral sign
+    return <>&#11021;</>;
   };
 
   const formatCurrency = (value) => {
@@ -89,6 +102,11 @@ const InvoiceView = () => {
     } else if (sortField === 'id') {
       const aValue = a?.id;
       const bValue = b?.id;
+      return sortOrder === 'asc' ? aValue - bValue : bValue - aValue;
+    }
+    else if (sortField === 'invoice_identifier') {
+      const aValue = a?.invoice_identifier;
+      const bValue = b?.invoice_identifier;
       return sortOrder === 'asc' ? aValue - bValue : bValue - aValue;
     } else if (sortField === 'Company.name') {
       const aValue = a.Company?.name || '';
@@ -199,7 +217,7 @@ const InvoiceView = () => {
             />
           </div>
 
-          <table className="table table-striped table-hover" ref={tableRef} id="invoice-table">
+          <table className="table table-striped table-hover" ref={ref} id= "invoice-table">
             {/* Table headers */}
             <thead>
               <tr>
@@ -264,15 +282,19 @@ const InvoiceView = () => {
               ))}
             </tbody>
           </table>
+
           <DownloadTableExcel
                     filename="invoice table"
                     sheet="invoice"
                     table="invoice-table"
-                    currentTableRef={tableRef.current}>
+                    currentTableRef={ref.current}>
+                      
+                      <button className={`btn btn-success disabled ${loading1? 'disabled' : 'enabled'}`}>Export to Excel</button>
 
-                   <button className="btn btn-success"> Export to excel </button>
-
-                </DownloadTableExcel>
+      
+                       </DownloadTableExcel>
+                      
+               
 
           <div className="d-flex justify-content-between align-items-center mt-3">
             <div>
